@@ -19,21 +19,23 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', checkCarId, async (req, res, next) => {
     try {
-        res.status(200).json({ message: 'still working on this one...' })
+        const data = await Car.getById(req.params.id);
+        res.json(data);
     } catch(err) {
         next(err)
     }
 })
 
-router.post('/:id', checkCarPayload, checkVinNumberUnique, checkVinNumberValid, async (req, res, next) => {
+router.post('/', checkCarPayload, checkVinNumberUnique, checkVinNumberValid, async (req, res, next) => {
     try {
-        res.status(200).json({ message: 'still working on this one...' })
+        const data = await Car.create(req.body);
+        res.status(201).json(data)
     } catch(err) {
         next(err)
     }
 })
 
-router.use((err, req, res) => {
+router.use((err, req, res, next) => { // eslint-disable-line
     res.status(err.status || 500).json({
         message: err.message,
     })
